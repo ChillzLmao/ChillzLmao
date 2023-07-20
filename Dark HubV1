@@ -1,0 +1,132 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({Name = "Dark Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Tab = Window:MakeTab({
+    Name = "Scripts",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+-- Function to execute the Reach script
+local function executeReachScript()
+    loadstring(game:HttpGet("https://pastebin.com/raw/h7ZBPUDn"))()
+end
+
+Tab:AddButton({
+    Name = "Reach Script",
+    Callback = function()
+        executeReachScript()
+    end
+})
+
+-- Function to execute the Fly v3 script
+local function executeFlyScript()
+    local scriptURL = "https://pastebin.com/raw/YSL3xKYU"
+    local success, errorMsg = pcall(function()
+        loadstring(game:HttpGet(scriptURL))()
+    end)
+    if not success then
+        warn("Failed to execute script: " .. errorMsg)
+    end
+end
+
+-- Function to execute the Tycoon script
+local function executeTycoonScript()
+    local scriptURL = "https://pastebin.com/raw/U9WBdeFe"
+    local success, errorMsg = pcall(function()
+        loadstring(game:HttpGet(scriptURL))()
+    end)
+    if not success then
+        warn("Failed to execute script: " .. errorMsg)
+    end
+end
+
+-- Function to execute the Infinite Yield script
+local function executeInfiniteYieldScript()
+    local scriptURL = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"
+    local success, errorMsg = pcall(function()
+        loadstring(game:HttpGet(scriptURL))()
+    end)
+    if not success then
+        warn("Failed to execute script: " .. errorMsg)
+    end
+end
+
+-- Function to execute the Super League Soccer script
+local function executeSuperLeagueSoccerScript()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/LOLking123456/Soccer5/main/SuperLeague"))()
+end
+
+-- Create buttons for the additional scripts
+Tab:AddButton({
+    Name = "Fly v3",
+    Callback = function()
+        executeFlyScript()
+    end
+})
+
+Tab:AddButton({
+    Name = "Tycoon",
+    Callback = function()
+        executeTycoonScript()
+    end
+})
+
+Tab:AddButton({
+    Name = "Infinite Yield",
+    Callback = function()
+        executeInfiniteYieldScript()
+    end
+})
+
+Tab:AddButton({
+    Name = "Super League Soccer",
+    Callback = function()
+        executeSuperLeagueSoccerScript()
+    end
+})
+
+-- Removing the premium hook for checkPremium.php
+local httpHook;
+httpHook = hookfunction(game.HttpGet, function(self, ...)
+    local Args = {...}
+    if Args[1] and type(Args[1]) == "string" then
+        if Args[1]:match("checkPremium.php") then
+            return "true"
+        end
+    end
+    return httpHook(self, ...)
+end)
+
+-- Create a new tab for Hubs
+local TabHubs = Window:MakeTab({
+    Name = "Hubs",
+    Icon = "rbxassetid://4483345998", -- Same placeholder icon used for the Scripts tab
+    PremiumOnly = false
+})
+
+-- Function to execute the BritishHub script provided for the Hubs tab
+local function executeBritishHubScript()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/RedCoat8102/Britishhub/main/Protected_5528274969578405.lua.txt"))()
+end
+
+-- Add button for the BritishHub script on the Hubs tab
+TabHubs:AddButton({
+    Name = "BritishHub",
+    Callback = function()
+        executeBritishHubScript()
+    end
+})
+
+-- Function to execute the HarshTechV7.6 script provided for the Hubs tab
+local function executeHarshTechV76Script()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/YellowGreg/Loadstring/main/HarshTechV7.6-Pc-Or-Mobile.lua"))()
+end
+
+-- Add button for the HarshTechV7.6 script on the Hubs tab
+TabHubs:AddButton({
+    Name = "HarshTechV7.6",
+    Callback = function()
+        executeHarshTechV76Script()
+    end
+})
