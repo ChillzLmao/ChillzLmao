@@ -7,84 +7,65 @@ local Tab = Window:MakeTab({
     PremiumOnly = false
 })
 
--- Function to execute the Reach script
-local function executeReachScript()
-    loadstring(game:HttpGet("https://pastebin.com/raw/h7ZBPUDn"))()
-end
+local scriptsList = {
+    {Name = "Autoclicker", Script = "\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\34\104\116\116\112\115\58\47\47\112\97\115\116\101\98\105\110\46\99\111\109\47\114\97\119\47\71\65\104\75\112\68\84\55\34\41\41\40\41\10"},
+    {Name = "Fly v3", Script = "https://pastebin.com/raw/YSL3xKYU"},
+    {Name = "HarshTechV7.6", Script = "https://raw.githubusercontent.com/YellowGreg/Loadstring/main/HarshTechV7.6-Pc-Or-Mobile.lua"},
+    {Name = "Infinite Yield", Script = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+    {Name = "Project Omega", Script = "https://raw.githubusercontent.com/Cerbiale/ProjectOmega/main/ProjectOmegaLoader.lua"},
+    {Name = "Reach Script", Script = "https://pastebin.com/raw/h7ZBPUDn"},
+    {Name = "Script Hub", Script = "https://gist.githubusercontent.com/Dvrknvss/e2a906135f9e55d0d2ae7aaf337d8937/raw/dc055592803f8418ddf8ba7b84286f47638849d4/noidea"},
+    {Name = "Super League Soccer", Script = "https://raw.githubusercontent.com/LOLking123456/Soccer5/main/SuperLeague"},
+    {Name = "Tycoon", Script = "https://pastebin.com/raw/U9WBdeFe"}
+}
 
-Tab:AddButton({
-    Name = "Reach Script",
-    Callback = function()
-        executeReachScript()
-    end
-})
-
--- Function to execute the Fly v3 script
-local function executeFlyScript()
-    local scriptURL = "https://pastebin.com/raw/YSL3xKYU"
+-- Function to execute a script given its URL
+local function executeScript(scriptName, scriptURL)
     local success, errorMsg = pcall(function()
         loadstring(game:HttpGet(scriptURL))()
     end)
     if not success then
         warn("Failed to execute script: " .. errorMsg)
+    else
+        OrionLib:MakeNotification({
+            Name = "Executed Script",
+            Content = "Executed " .. scriptName,
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
     end
 end
 
--- Function to execute the Tycoon script
-local function executeTycoonScript()
-    local scriptURL = "https://pastebin.com/raw/U9WBdeFe"
-    local success, errorMsg = pcall(function()
-        loadstring(game:HttpGet(scriptURL))()
+-- Function to sort the scripts in alphabetical order
+local function sortScriptsAlphabetically()
+    table.sort(scriptsList, function(a, b)
+        return a.Name < b.Name
     end)
-    if not success then
-        warn("Failed to execute script: " .. errorMsg)
-    end
 end
 
--- Function to execute the Infinite Yield script
-local function executeInfiniteYieldScript()
-    local scriptURL = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"
-    local success, errorMsg = pcall(function()
-        loadstring(game:HttpGet(scriptURL))()
-    end)
-    if not success then
-        warn("Failed to execute script: " .. errorMsg)
-    end
+-- Function to show the welcome notification
+local function showWelcomeNotification()
+    OrionLib:MakeNotification({
+        Name = "Welcome!",
+        Content = "Hello, Welcome To Dark Hub",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+    })
 end
 
--- Function to execute the Super League Soccer script
-local function executeSuperLeagueSoccerScript()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/LOLking123456/Soccer5/main/SuperLeague"))()
+showWelcomeNotification()
+
+-- Create buttons for the scripts
+for _, scriptData in ipairs(scriptsList) do
+    Tab:AddButton({
+        Name = scriptData.Name,
+        Callback = function()
+            executeScript(scriptData.Name, scriptData.Script)
+        end
+    })
 end
 
--- Create buttons for the additional scripts
-Tab:AddButton({
-    Name = "Fly v3",
-    Callback = function()
-        executeFlyScript()
-    end
-})
-
-Tab:AddButton({
-    Name = "Tycoon",
-    Callback = function()
-        executeTycoonScript()
-    end
-})
-
-Tab:AddButton({
-    Name = "Infinite Yield",
-    Callback = function()
-        executeInfiniteYieldScript()
-    end
-})
-
-Tab:AddButton({
-    Name = "Super League Soccer",
-    Callback = function()
-        executeSuperLeagueSoccerScript()
-    end
-})
+sortScriptsAlphabetically()
 
 -- Removing the premium hook for checkPremium.php
 local httpHook;
@@ -98,19 +79,19 @@ httpHook = hookfunction(game.HttpGet, function(self, ...)
     return httpHook(self, ...)
 end)
 
--- Create a new tab for Hubs
+-- Create a new tab for Hubs/Gui
 local TabHubs = Window:MakeTab({
-    Name = "Hubs",
+    Name = "Hubs/Gui",
     Icon = "rbxassetid://4483345998", -- Same placeholder icon used for the Scripts tab
     PremiumOnly = false
 })
 
--- Function to execute the BritishHub script provided for the Hubs tab
+-- Function to execute the BritishHub script provided for the Hubs/Gui tab
 local function executeBritishHubScript()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/RedCoat8102/Britishhub/main/Protected_5528274969578405.lua.txt"))()
 end
 
--- Add button for the BritishHub script on the Hubs tab
+-- Add button for the BritishHub script on the Hubs/Gui tab
 TabHubs:AddButton({
     Name = "BritishHub",
     Callback = function()
@@ -118,28 +99,29 @@ TabHubs:AddButton({
     end
 })
 
--- Function to execute the HarshTechV7.6 script provided for the Hubs tab
-local function executeHarshTechV76Script()
+-- Function to execute the HarshTech script provided for the Hubs/Gui tab
+local function executeHarshTechScript()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/YellowGreg/Loadstring/main/HarshTechV7.6-Pc-Or-Mobile.lua"))()
 end
 
--- Add button for the HarshTechV7.6 script on the Hubs tab
+-- Add button for the HarshTech script on the Hubs/Gui tab
 TabHubs:AddButton({
     Name = "HarshTechV7.6",
     Callback = function()
-        executeHarshTechV76Script()
+        executeHarshTechScript()
     end
 })
 
--- Function to execute the Autoclicker script provided for the Scripts tab
-local function executeAutoclickerScript()
-    loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\34\104\116\116\112\115\58\47\47\112\97\115\116\101\98\105\110\46\99\111\109\47\114\97\119\47\71\65\104\75\112\68\84\55\34\41\41\40\41\10")()
+-- Function to sort the scripts again whenever a new script is added
+local function resortScriptsAlphabetically()
+    sortScriptsAlphabetically()
+    Tab:ClearButtons()
+    for _, scriptData in ipairs(scriptsList) do
+        Tab:AddButton({
+            Name = scriptData.Name,
+            Callback = function()
+                executeScript(scriptData.Name, scriptData.Script)
+            end
+        })
+    end
 end
-
--- Add button for the Autoclicker script on the Scripts tab
-Tab:AddButton({
-    Name = "Autoclicker",
-    Callback = function()
-        executeAutoclickerScript()
-    end
-})
