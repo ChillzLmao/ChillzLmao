@@ -1,11 +1,7 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local DrRayLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
+local window = DrRayLibrary:Load("Dark Hub", "ImageIdHere") -- Change "ImageIdHere" to the desired image ID
 
-local Window = OrionLib:MakeWindow({Name = "Dark Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
-local Tab = Window:MakeTab({
-    Name = "Scripts",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
+local tabScripts = DrRayLibrary.newTab("Scripts", "ImageIdHere") -- Change "ImageIdHere" to the desired image ID
 
 local scriptsList = {
     {Name = "Autoclicker", Script = "\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\34\104\116\116\112\115\58\47\47\112\97\115\116\101\98\105\110\46\99\111\109\47\114\97\119\47\71\65\104\75\112\68\84\55\34\41\41\40\41\10"},
@@ -21,51 +17,25 @@ local scriptsList = {
 
 -- Function to execute a script given its URL
 local function executeScript(scriptName, scriptURL)
-    local success, errorMsg = pcall(function()
-        loadstring(game:HttpGet(scriptURL))()
-    end)
-    if not success then
-        warn("Failed to execute script: " .. errorMsg)
+    local success, scriptCode = pcall(game.HttpGet, game, scriptURL)
+    if success then
+        local executeSuccess, errorMsg = pcall(loadstring, scriptCode)
+        if not executeSuccess then
+            warn("Failed to execute script: " .. errorMsg)
+        else
+            DrRayLibrary:Notification("Executed Script", "Executed " .. scriptName, "rbxassetid://4483345998", 5) -- Change "rbxassetid://4483345998" to the desired image ID for the notification
+        end
     else
-        OrionLib:MakeNotification({
-            Name = "Executed Script",
-            Content = "Executed " .. scriptName,
-            Image = "rbxassetid://4483345998",
-            Time = 5
-        })
+        warn("Failed to fetch script from URL: " .. scriptURL)
     end
 end
 
--- Function to sort the scripts in alphabetical order
-local function sortScriptsAlphabetically()
-    table.sort(scriptsList, function(a, b)
-        return a.Name < b.Name
+-- Create buttons for the scripts in the "Scripts" tab
+for _, scriptData in ipairs(scriptsList) do
+    tabScripts.newButton(scriptData.Name, "Execute " .. scriptData.Name, function()
+        executeScript(scriptData.Name, scriptData.Script)
     end)
 end
-
--- Function to show the welcome notification
-local function showWelcomeNotification()
-    OrionLib:MakeNotification({
-        Name = "Welcome!",
-        Content = "Hello, Welcome To Dark Hub",
-        Image = "rbxassetid://4483345998",
-        Time = 5
-    })
-end
-
-showWelcomeNotification()
-
--- Create buttons for the scripts
-for _, scriptData in ipairs(scriptsList) do
-    Tab:AddButton({
-        Name = scriptData.Name,
-        Callback = function()
-            executeScript(scriptData.Name, scriptData.Script)
-        end
-    })
-end
-
-sortScriptsAlphabetically()
 
 -- Removing the premium hook for checkPremium.php
 local httpHook;
@@ -79,49 +49,38 @@ httpHook = hookfunction(game.HttpGet, function(self, ...)
     return httpHook(self, ...)
 end)
 
--- Create a new tab for Hubs/Gui
-local TabHubs = Window:MakeTab({
-    Name = "Hubs/Gui",
-    Icon = "rbxassetid://4483345998", -- Same placeholder icon used for the Scripts tab
-    PremiumOnly = false
-})
+-- Create a new tab for "Player"
+local tabPlayer = DrRayLibrary.newTab("Player", "ImageIdHere") -- Change "ImageIdHere" to the desired image ID
 
--- Function to execute the BritishHub script provided for the Hubs/Gui tab
-local function executeBritishHubScript()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/RedCoat8102/Britishhub/main/Protected_5528274969578405.lua.txt"))()
+-- Function to teleport the player to a specific position
+local function teleportToPosition(x, y, z)
+    game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(x, y, z))
 end
 
--- Add button for the BritishHub script on the Hubs/Gui tab
-TabHubs:AddButton({
-    Name = "BritishHub",
-    Callback = function()
-        executeBritishHubScript()
-    end
-})
+-- Button to teleport the player to position (0, 0, 0)
+tabPlayer.newButton("Teleport to (0, 0, 0)", "Teleport the player to position (0, 0, 0)", function()
+    teleportToPosition(0, 0, 0)
+end)
 
--- Function to execute the HarshTech script provided for the Hubs/Gui tab
-local function executeHarshTechScript()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/YellowGreg/Loadstring/main/HarshTechV7.6-Pc-Or-Mobile.lua"))()
+-- Button to teleport the player to position (100, 100, 100)
+tabPlayer.newButton("Teleport to (100, 100, 100)", "Teleport the player to position (100, 100, 100)", function()
+    teleportToPosition(100, 100, 100)
+end)
+
+-- Add more buttons for other player-related functionalities as needed
+
+-- Function to sort the scripts in alphabetical order
+local function sortScriptsAlphabetically()
+    table.sort(scriptsList, function(a, b)
+        return a.Name < b.Name
+    end)
 end
 
--- Add button for the HarshTech script on the Hubs/Gui tab
-TabHubs:AddButton({
-    Name = "HarshTechV7.6",
-    Callback = function()
-        executeHarshTechScript()
-    end
-})
-
--- Function to sort the scripts again whenever a new script is added
-local function resortScriptsAlphabetically()
-    sortScriptsAlphabetically()
-    Tab:ClearButtons()
-    for _, scriptData in ipairs(scriptsList) do
-        Tab:AddButton({
-            Name = scriptData.Name,
-            Callback = function()
-                executeScript(scriptData.Name, scriptData.Script)
-            end
-        })
-    end
+-- Function to show the welcome notification
+local function showWelcomeNotification()
+    DrRayLibrary:Notification("Welcome!", "Hello, Welcome To Dark Hub", "rbxassetid://4483345998", 5) -- Change "rbxassetid://4483345998" to the desired image ID for the notification
 end
+
+showWelcomeNotification()
+
+sortScriptsAlphabetically()
